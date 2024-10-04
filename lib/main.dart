@@ -127,21 +127,182 @@ class HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 GestureDetector(
-                  onTap: () => changeDestination("Париж"),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ColumnScreen()),
+                  ),
                   child: Icon(Icons.location_city, size: 32, color: Colors.blue),
                 ),
                 GestureDetector(
-                  onTap: () => changeDestination("Токио"),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ListViewScreen()),
+                  ),
                   child: Icon(Icons.location_city, size: 32, color: Colors.green),
                 ),
                 GestureDetector(
-                  onTap: () => changeDestination("Нью-Йорк"),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ListViewSeparatedScreen()),
+                  ),
                   child: Icon(Icons.location_city, size: 32, color: Colors.red),
                 ),
               ],
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+// Экран со списком на основе Column
+class ColumnScreen extends StatefulWidget {
+  @override
+  _ColumnScreenState createState() => _ColumnScreenState();
+}
+
+class _ColumnScreenState extends State<ColumnScreen> {
+  List<String> destinations = ["Париж", "Токио", "Нью-Йорк"];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Список на Column")),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: destinations.map((destination) {
+            return Card(
+              elevation: 5,
+              margin: EdgeInsets.symmetric(vertical: 10),
+              child: ListTile(
+                title: Text(
+                  destination,
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                trailing: IconButton(
+                  icon: Icon(Icons.delete, color: Colors.red),
+                  onPressed: () {
+                    setState(() {
+                      destinations.remove(destination);
+                    });
+                  },
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.blue,
+        onPressed: () {
+          setState(() {
+            destinations.add("Новое направление");
+          });
+        },
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+// Экран со списком на основе ListView.builder
+class ListViewScreen extends StatefulWidget {
+  @override
+  _ListViewScreenState createState() => _ListViewScreenState();
+}
+
+class _ListViewScreenState extends State<ListViewScreen> {
+  List<String> destinations = ["Париж", "Токио", "Нью-Йорк"];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Список на ListView")),
+      body: ListView.builder(
+        padding: const EdgeInsets.all(16.0),
+        itemCount: destinations.length,
+        itemBuilder: (context, index) {
+          return Card(
+            elevation: 5,
+            margin: EdgeInsets.symmetric(vertical: 10),
+            child: ListTile(
+              title: Text(
+                destinations[index],
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              trailing: IconButton(
+                icon: Icon(Icons.delete, color: Colors.red),
+                onPressed: () {
+                  setState(() {
+                    destinations.removeAt(index);
+                  });
+                },
+              ),
+            ),
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.green,
+        onPressed: () {
+          setState(() {
+            destinations.add("Новое направление");
+          });
+        },
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+// Экран со списком на основе ListView.separated
+class ListViewSeparatedScreen extends StatefulWidget {
+  @override
+  _ListViewSeparatedScreenState createState() => _ListViewSeparatedScreenState();
+}
+
+class _ListViewSeparatedScreenState extends State<ListViewSeparatedScreen> {
+  List<String> destinations = ["Париж", "Токио", "Нью-Йорк"];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Список на ListView.separated")),
+      body: ListView.separated(
+        padding: const EdgeInsets.all(16.0),
+        itemCount: destinations.length,
+        itemBuilder: (context, index) {
+          return Card(
+            elevation: 5,
+            margin: EdgeInsets.symmetric(vertical: 10),
+            child: ListTile(
+              title: Text(
+                destinations[index],
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              trailing: IconButton(
+                icon: Icon(Icons.delete, color: Colors.red),
+                onPressed: () {
+                  setState(() {
+                    destinations.removeAt(index);
+                  });
+                },
+              ),
+            ),
+          );
+        },
+        separatorBuilder: (context, index) => Divider(),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.red,
+        onPressed: () {
+          setState(() {
+            destinations.add("Новое направление");
+          });
+        },
+        child: Icon(Icons.add),
       ),
     );
   }
